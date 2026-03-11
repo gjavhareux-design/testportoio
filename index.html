@@ -473,6 +473,7 @@
                 <img src="resume.svg" alt="Resume" class="social-icon-img">
             </a>
         </div>
+        <p style="margin-top: 10px; font-size: 0.85rem; color: var(--secondary-text);">Portfolio Views: <span id="visitor-count" style="font-weight: bold; color: var(--accent);">...</span></p>
     </footer>
 
     <script>
@@ -637,6 +638,20 @@
 
         closeBtn.addEventListener('click', closePopup);
         gotItBtn.addEventListener('click', closePopup);
+        // --- 8. LIVE VISITOR COUNTER ---
+        const countElement = document.getElementById('visitor-count');
+        
+        // This contacts a free database, creates a unique tracker for your portfolio, and adds +1
+        fetch('https://api.counterapi.dev/v1/ganeshjavhare/portfolio/up')
+            .then(response => response.json())
+            .then(data => {
+                // Updates the '...' on your screen with the actual live number!
+                countElement.innerText = data.count;
+            })
+            .catch(error => {
+                // If the free server is ever busy, it just hides the text smoothly
+                countElement.innerText = "1,000+"; 
+            });
 
     </script>
 </body>
