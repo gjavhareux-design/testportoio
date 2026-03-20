@@ -812,6 +812,63 @@
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
         };
+        // --- 10. SUITCASE LOCK STATS ANIMATION ---
+        // We delay it by 800ms so it spins right as the Hero Blur Reveal finishes!
+        setTimeout(() => {
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                // Grab the original text (e.g., "99%" or "7+")
+                const value = stat.innerText;
+                stat.innerHTML = ''; 
+                
+                // Style the container to act like the physical window of a suitcase lock
+                stat.style.display = 'inline-flex';
+                stat.style.alignItems = 'center';
+                stat.style.justifyContent = 'center';
+                stat.style.overflow = 'hidden';
+                stat.style.height = '1.4em'; // Keeps the spinning contained
+
+                // Check every single letter/number in the text
+                [...value].forEach((char, index) => {
+                    // If it is a number, build a spinning column!
+                    if (!isNaN(char) && char !== ' ') {
+                        const col = document.createElement('span');
+                        col.style.display = 'inline-flex';
+                        col.style.flexDirection = 'column';
+                        // The math here creates a satisfying "click" to a stop
+                        col.style.transition = `transform ${2 + (index * 0.3)}s cubic-bezier(0.16, 1, 0.3, 1)`;
+                        
+                        // A random strip of numbers to simulate the spin, ending on your real number
+                        const target = parseInt(char);
+                        const sequence = [0, 8, 4, 9, 2, 7, 5, 1, 6, 3, target]; 
+                        
+                        sequence.forEach(num => {
+                            const numSpan = document.createElement('span');
+                            numSpan.innerText = num;
+                            numSpan.style.height = '1.4em';
+                            numSpan.style.display = 'flex';
+                            numSpan.style.alignItems = 'center';
+                            col.appendChild(numSpan);
+                        });
+
+                        stat.appendChild(col);
+
+                        // Trigger the physical slide up
+                        setTimeout(() => {
+                            col.style.transform = `translateY(calc(-100% + 1.4em))`;
+                        }, 50);
+                        
+                    } else {
+                        // If it's a symbol like "%", "+", or "M", just show it normally
+                        const symbol = document.createElement('span');
+                        symbol.innerText = char;
+                        symbol.style.display = 'flex';
+                        symbol.style.alignItems = 'center';
+                        symbol.style.height = '1.4em';
+                        stat.appendChild(symbol);
+                    }
+                });
+            });
+        }, 800);
     </script>
 </body>
 </html>
